@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Arial', sans-serif;
-            background-color: #000000;
+            background-color: black;
             margin: 0;
             display: flex;
             align-items: center;
@@ -21,17 +21,21 @@
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             width: 400px;
+       	border: green solid 4px;
+            background-color:black;
+                 color: green;
+            
         }
 
         h2 {
             text-align: center;
-            color: #333;
+            color: green;
         }
 
         label {
             display: block;
             margin-bottom: 8px;
-            color: #555;
+            color: green;
         }
 
         input, textarea, button {
@@ -42,27 +46,33 @@
             border: 1px solid #ddd;
             border-radius: 4px;
             font-size: 14px;
+            	border: green solid 2px;
+            	background-color: black;
+            	color:green;
         }
 
         textarea {
             resize: vertical;
+            	border: green solid 2px;
         }
 
         button {
-            background-color: #4caf50;
-            color: #fff;
+            background-color: black;
+            color: white;
             cursor: pointer;
+            	border: green solid 2px;
+            		color:green;
         }
 
         button:hover {
             background-color: #45a049;
         }
     </style>
+
 </head>
 <body>
-    <form action="contact.php" method="get" enctype="multipart/form-data">
+    <form action="PHPMailer/contact.php" method="post" enctype="multipart/form-data">
         <h2>Contact Us</h2>
-
         <label for="name">Name:</label>
         <input type="text" id="name" name="name" required>
 
@@ -75,10 +85,31 @@
         <label for="message">Message:</label>
         <textarea id="message" name="message" rows="4" required></textarea>
 
-        <label for="file">Attach File (optional):</label>
-        <input type="file" id="file" name="file">
 
+        <label for="userfile">Attach Files:</label>
+            <div id="file-input-container">
+    <!--<input name="userfile[]" type="file" multiple="multiple">-->
+    <!-- <br/>-->
+     </div>
+        <button type="button" onclick="addFileInput()">Click To Add File</button>
+        <button type="button" onclick="clearAttachments()">Clear Attachments</button>
         <button type="submit">Submit</button>
     </form>
+    <script>
+                function addFileInput() {
+            var fileInputContainer = document.getElementById('file-input-container');
+            var newFileInput = document.createElement('input');
+            newFileInput.setAttribute('type', 'file');
+            newFileInput.setAttribute('name', 'userfile[]');
+            newFileInput.setAttribute('multiple', 'multiple');
+            fileInputContainer.appendChild(newFileInput);
+            fileInputContainer.appendChild(document.createElement('br'));
+        }
+
+        function clearAttachments() {
+            var fileInputContainer = document.getElementById('file-input-container');
+            fileInputContainer.innerHTML = '';
+}
+    </script>
 </body>
 </html>

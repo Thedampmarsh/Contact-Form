@@ -9,7 +9,7 @@
 
     error_reporting(E_ALL);
     ini_set('display_errors', 1);
-
+    $msg = '';
     $mail = new PHPMailer(true);
     try {
         $mail->SMTPDebug = 2;
@@ -21,14 +21,30 @@
         $mail->Port = 465; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->isHTML(false);
-        $mail->setFrom('marshall@sanctifiedsecurity.com', $_POST['name']);
+        $mail->setFrom($_POST['email'], $_POST['name']);
         $mail->addAddress('marshall@sanctifiedsecurity.com');
+        $mail->addAddress('cameron.wood.business@gmail.com');
         $mail->Subject = 'New Project Inquiry';
         $mail->Body = <<<EOT
 Email: {$_POST['email']}
 Name: {$_POST['name']}
 Message: {$_POST['message']}
 EOT;
+ //Attach multiple files one by one
+    for ($ct = 0, $ctMax = count($_FILES['userfile']['tmp_name']); $ct < $ctMax; $ct++) {
+        //Extract an extension from the provided filename
+        $ext = PHPMailer::mb_pathinfo($_FILES['userfile']['name'][$ct], PATHINFO_EXTENSION);
+        //Define a safe location to move the uploaded file to, preserving the extension
+        $uploadfile = tempnam(sys_get_temp_dir(), hash('sha256', $_FILES['userfile']['name'][$ct])) . '.' . $ext;
+        $filename = $_FILES['userfile']['name'][$ct];
+        if (move_uploaded_file($_FILES['userfile']['tmp_name'][$ct], $uploadfile)) {
+            if (!$mail->addAttachment($uploadfile, $filename)) {
+                $msg .= 'Failed to attach file ' . $filename;
+            }
+        } else {
+            $msg .= 'Failed to move file to ' . $uploadfile;
+        }
+    }
         $mail->send();
         echo 'Message has been sent';
     } catch (Exception $e) {
