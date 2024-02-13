@@ -14,16 +14,15 @@
     try {
         $mail->SMTPDebug = 2;
         $mail->isSMTP();
-        $mail->Host = 'mail.sanctifiedsecurity.com';
+        $mail->Host = 'mail.domain.com';
         $mail->SMTPAuth = true;
-        $mail->Username = 'marshall@sanctifiedsecurity.com';
+        $mail->Username = 'emailUser';
         $mail->Password = 'ORvFzIEGKuWF77e1eUpt2iXg66DIEdt';
         $mail->Port = 465; 
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS;
         $mail->isHTML(false);
         $mail->setFrom($_POST['email'], $_POST['name']);
-        $mail->addAddress('marshall@sanctifiedsecurity.com');
-        $mail->addAddress('cameron.wood.business@gmail.com');
+        $mail->addAddress('recipientAddress');
         $mail->Subject = 'New Project Inquiry';
         $mail->Body = <<<EOT
 Email: {$_POST['email']}
